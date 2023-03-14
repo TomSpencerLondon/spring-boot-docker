@@ -69,6 +69,10 @@ The latest tag and the project version.
 We run the maven clean package first and then docker build.
 ```bash
 mvn clean package
+mvn clean package docker:build
+```
+The ```docker:build``` command is the same as:
+```bash
 docker build -t spring-boot-docker .
 ```
 

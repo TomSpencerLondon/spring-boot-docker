@@ -60,15 +60,15 @@
                 <version>0.20.0</version>
 
                 <configuration>
-                    <dockerHost>http://127.0.0.1:2375</dockerHost>
-<!--                    <dockerHost>unix:///var/run/docker.sock</dockerHost>-->
+<!--                    <dockerHost>http://127.0.0.1:2375</dockerHost>-->
+                    <dockerHost>unix:///var/run/docker.sock</dockerHost>
 
                     <verbose>true</verbose>
                     <images>
                         <image>
                             <name>${docker.image.prefix}/${docker.image.name}</name>
                             <build>
-                                <dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
+                                <dockerFileDir>${project.basedir}/src/main/docker/</dockerFileDir>
 
                                 <!--copies artficact to docker build dir in target-->
                                 <assembly>

@@ -21,7 +21,7 @@
                         <image>
                             <name>${docker.image.prefix}/${docker.image.name}</name>
                             <build>
-                                <dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
+                                <dockerFileDir>${project.basedir}/src/main/docker/</dockerFileDir>
 
                                 <!--copies artficact to docker build dir in target-->
                                 <assembly>
@@ -38,14 +38,14 @@
             </plugin>
 ```
 
-Here we add the fabric8 plugin. I am using localhost because I am running on linux - for unix we use the commented line:
+Here we add the fabric8 plugin:
 ```xml
 <dockerHost>unix:///var/run/docker.sock</dockerHost>
 ```
 
 This tells the plugin where you dockerfile is kept:
 ```xml
-<dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
+<dockerFileDir>${project.basedir}/src/main/docker/</dockerFileDir>
 ```
 
 The following copies build artifacts into the target directory:

@@ -76,3 +76,23 @@ The ```docker:build``` command is the same as:
 docker build -t spring-boot-docker .
 ```
 
+To push the image to docker we can use:
+```java
+mvn clean package docker:build docker:push
+```
+We also need to update settings.xml inside .m2 folder:
+```xml
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <id>docker.io</id>
+            <username></username>
+            <password></password>
+        </server>
+    </servers>
+</settings>
+```
+This allows us to push the image to dockerhub (hub.docker.com).
+

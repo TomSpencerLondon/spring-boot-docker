@@ -96,3 +96,24 @@ We also need to update settings.xml inside .m2 folder:
 ```
 This allows us to push the image to dockerhub (hub.docker.com).
 
+![image](https://user-images.githubusercontent.com/27693622/225072954-aed7fd84-8e5a-4e7f-9ffb-36d778981ade.png)
+
+### Add dynamic versioning
+```bash
+
+FROM openjdk
+
+ARG artifactId
+VOLUME /tmp
+ADD maven/spring-boot-docker-${artifactId}.jar myapp.jar
+RUN sh -c "touch /myapp.jar"
+ENTRYPOINT ["java", "-Djava.security.eqd=file:/dev/./urandom", "-jar", "/myapp.jar"]
+```
+The artifactId is defined in the pom.xml file:
+```xml
+<configuration>
+    <buildArgs>
+        <artifactId>${project.version}</artifactId>
+    </buildArgs>
+</configuration>
+```

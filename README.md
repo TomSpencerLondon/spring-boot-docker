@@ -125,3 +125,5 @@ mvn clean package docker:build docker:push
 
 ![image](https://user-images.githubusercontent.com/27693622/225078310-bfc73a68-6318-4862-bd71-a099705d77e0.png)
 
+### Adding port mapping
+

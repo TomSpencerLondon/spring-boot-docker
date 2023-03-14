@@ -117,3 +117,11 @@ The artifactId is defined in the pom.xml file:
     </buildArgs>
 </configuration>
 ```
+
+We can now see different versions of the docker image as we push to dockerhub:
+```bash
+mvn clean package docker:build docker:push
+```
+
+![image](https://user-images.githubusercontent.com/27693622/225078310-bfc73a68-6318-4862-bd71-a099705d77e0.png)
+

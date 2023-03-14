@@ -127,3 +127,17 @@ mvn clean package docker:build docker:push
 
 ### Adding port mapping
 
+We can specify ports with the fabric8 plugin with the run configuration:
+
+```xml
+<run>
+    <ports>
+        <port>8081:8080</port>
+    </ports>
+</run>
+```
+You can then run the application with:
+```bash
+mvn docker:run
+
+```

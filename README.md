@@ -230,3 +230,80 @@ Add custom network config for Fabric8 with RabbitMQ:
     </network>
 </run>
 ```
+
+### Deployment to docker
+We set up integration tests with the maven surefire plugin:
+```bash
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-failsafe-plugin</artifactId>
+    <version>3.0.0</version>
+    <executions>
+        <execution>
+            <id>integration-test</id>
+            <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+            </goals>
+        </execution>
+
+    </executions>
+</plugin>
+```
+This runs Tests with the suffix IT automatically:
+```bash
+public class FakeIntegrationTestsIT {
+
+    @Test
+    public void someFakeTestOne() throws Exception {
+        System.out.println("Test 1 .");
+
+        Thread.sleep(100);
+
+        System.out.println("Test 1 . .");
+
+        Thread.sleep(100);
+
+        System.out.println("Test 1 . .");
+
+        Thread.sleep(100);
+
+        System.out.println("Test 1 . . .");
+
+        Thread.sleep(100);
+
+        System.out.println("Test 1 . . . .");
+
+        Thread.sleep(100);
+
+        System.out.println("Test 1 . . . . .");
+    }
+}
+```
+
+You can also set the execution in the fabric8 plugin to check the builds the fabric8 docker images:
+```bash
+<executions>
+    <execution>
+        <id>start</id>
+        <phase>pre-integration-test</phase>
+        <goals>
+            <goal>build</goal>
+            <goal>start</goal>
+        </goals>
+    </execution>
+    <execution>
+        <id>stop</id>
+        <phase>post-integration-test</phase>
+        <goals>
+            <goal>stop</goal>
+        </goals>
+    </execution>
+</executions>
+```
+
+### Example mvn command for Continuous Integration
+```bash
+mvn clean package docker:build verify docker:push
+```

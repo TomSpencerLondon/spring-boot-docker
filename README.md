@@ -305,5 +305,5 @@ You can also set the execution in the fabric8 plugin to check the builds the fab
 
 ### Example mvn command for Continuous Integration
 ```bash
-mvn clean package docker:build verify docker:push
+mvn clean package verify docker:push
 ```

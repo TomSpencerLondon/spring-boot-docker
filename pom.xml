@@ -23,6 +23,7 @@
         <java.version>11</java.version>
         <docker.image.prefix>tomspencerlondon</docker.image.prefix>
         <docker.image.name>springbootdocker</docker.image.name>
+        <docker.containerNamePattern>%a</docker.containerNamePattern>
     </properties>
 
     <dependencies>
@@ -76,9 +77,11 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.20.0</version>
+                <version>0.42.0</version>
 
                 <configuration>
+                    <containerNamePattern>%a</containerNamePattern>
+                    <autoCreateCustomNetworks>true</autoCreateCustomNetworks>
                     <buildArgs>
                         <version>${project.version}</version>
                     </buildArgs>
@@ -88,7 +91,45 @@
                     <verbose>true</verbose>
                     <images>
                         <image>
+                            <name>rabbitmq:3-management</name>
+                            <alias>rabbitmq</alias>
+                            <run>
+                                <ports>
+<!--                                    8081:15672 -p 5671:5671 -p 5672:5672 -->
+                                    <port>8081:15672</port>
+                                    <port>5671:5671</port>
+                                    <port>5672:5672</port>
+                                </ports>
+                                <network>
+                                    <mode>custom</mode>
+                                    <name>newrabbit</name>
+                                </network>
+                            </run>
+                        </image>
+                        <image>
+                            <name>mysql</name>
+                            <alias>mysqldb</alias>
+                            <run>
+                                <ports>
+                                    <port>3306:3306</port>
+                                </ports>
+                                <network>
+                                    <mode>custom</mode>
+                                    <name>newrabbit</name>
+                                </network>
+                                <env>
+                                    <MYSQL_DATABASE>pageviewservice</MYSQL_DATABASE>
+                                    <MYSQL_ALLOW_EMPTY_PASSWORD>yes</MYSQL_ALLOW_EMPTY_PASSWORD>
+                                </env>
+                                <!--wait for db to start-->
+                                <wait>
+                                    <time>10000</time>
+                                </wait>
+                            </run>
+                        </image>
+                        <image>
                             <name>${docker.image.prefix}/${docker.image.name}</name>
+                            <alias>springbootdocker</alias>
                             <build>
                                 <dockerFileDir>${project.basedir}/src/main/docker/</dockerFileDir>
 
@@ -107,7 +148,7 @@
                                 </ports>
                                 <network>
                                     <mode>custom</mode>
-                                    <name>pageview</name>
+                                    <name>newrabbit</name>
                                 </network>
                             </run>
                         </image>

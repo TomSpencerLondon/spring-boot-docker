@@ -156,7 +156,7 @@ docker network create pageview
 
 docker run --name mysqldb -p 3306:3306  --network pageview -e MYSQL_DATABASE=pageviewservice -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql
 
-docker run -d --name rabbitmq -p 8081:15672 -p 5671:5671 -p 5672:5672  --network rabbit_network rabbitmq:3-management
+docker run -d --name rabbitmq -p 8081:15672 -p 5671:5671 -p 5672:5672  --network pageview rabbitmq:3-management
 
 docker run --name pageviewservice -p 8082:8081 \
  --network pageview \

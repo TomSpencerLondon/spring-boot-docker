@@ -139,5 +139,94 @@ We can specify ports with the fabric8 plugin with the run configuration:
 You can then run the application with:
 ```bash
 mvn docker:run
+```
+Run without interactive:
+```bash
+ mvn docker:start
+```
+We can also do:
+```bash
+mvn docker:stop
+```
 
+#### Running page view microservice with tutorial site:
+
+```bash
+docker network create pageview
+
+docker run --name mysqldb -p 3306:3306  --network pageview -e MYSQL_DATABASE=pageviewservice -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql
+
+docker run -d --name rabbitmq -p 8081:15672 -p 5671:5671 -p 5672:5672  --network rabbit_network rabbitmq:3-management
+
+docker run --name pageviewservice -p 8082:8081 \
+ --network pageview \
+-e SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/pageviewservice \
+-e SPRING_PROFILES_ACTIVE=mysql  \
+-e SPRING_RABBITMQ_HOST=rabbitmq \
+springframeworkguru/pageviewservice
+```
+
+### JAXB with newer java versions
+- This is needed for this dependency:
+```xml
+<dependency>
+    <groupId>guru.springframework</groupId>
+    <artifactId>page-view-client</artifactId>
+    <version>0.0.2</version>
+</dependency>
+
+```
+Add glassfish dependency for java:
+```xml
+<dependency>
+    <groupId>org.glassfish.jaxb</groupId>
+    <artifactId>jaxb-runtime</artifactId>
+    <version>2.3.1</version>
+</dependency>
+```
+
+### RabbitMQ message for page visit:
+```bash
+Sending Message
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pageViewEvent>
+    <correlationId>542b8cf6-61cd-41e0-940d-e71c5f10fc34</correlationId>
+    <pageUrl>springfarmework.guru/product/1</pageUrl>
+    <pageViewDate>2023-03-15T12:11:48.396Z</pageViewDate>
+</pageViewEvent>
+```
+This is then received by the page view service:
+```bash
+Got Message!
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pageViewEvent>
+    <correlationId>542b8cf6-61cd-41e0-940d-e71c5f10fc34</correlationId>
+    <pageUrl>springfarmework.guru/product/1</pageUrl>
+    <pageViewDate>2023-03-15T12:11:48.396Z</pageViewDate>
+</pageViewEvent>
+```
+
+### Run
+Build with:
+```bash
+mvn clean package
+mvn clean package docker:build
+```
+Run with:
+```bash
+mvn docker:run
+```
+
+### Add network for connecting to RabbitMQ
+Add custom network config for Fabric8 with RabbitMQ:
+```bash
+<run>
+    <ports>
+        <port>8090:8080</port>
+    </ports>
+    <network>
+        <mode>custom</mode>
+        <name>pageview</name>
+    </network>
+</run>
 ```

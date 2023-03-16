@@ -455,3 +455,58 @@ pageviewservice_1  | </pageViewEvent>
 pageviewservice_1  | 
 
 ```
+
+### Docker compose again
+
+```bash
+version: '3.5'
+
+services:
+  pageviewservice:
+    depends_on:
+      - mysqldb
+      - rabbitmq
+    image: tomspencerlondon/pageviewservice
+    ports:
+      - "8082:8081"
+    networks:
+      - newrabbit
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "8081:15672"
+      - "5671:5671"
+      - "5672:5672"
+    networks:
+      - newrabbit
+  mysqldb:
+    image: mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - newrabbit
+    restart: always
+    environment:
+      MYSQL_DATABASE: pageviewservice
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  springbootdocker:
+    depends_on:
+      - rabbitmq
+    image: tomspencerlondon/springbootdocker
+    ports:
+      - "8090:8080"
+    networks:
+      - newrabbit
+networks:
+  newrabbit:
+    name: newrabbit
+    external: false
+```
+
+Above we have multiple services within docker-compose. We are using images that we have pushed to dockerhub.

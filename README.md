@@ -307,3 +307,6 @@ You can also set the execution in the fabric8 plugin to check the builds the fab
 ```bash
 mvn clean package verify docker:push
 ```
+
+### Docker Compose
+- use yml to work with docker compose

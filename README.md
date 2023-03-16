@@ -342,7 +342,6 @@ anothermaplist:
 ### Wordpress example with docker compose
 
 ```bash
-
 version: '2'
 
 services:
@@ -354,22 +353,60 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: wordpress
       MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
+    ports:
+      - 3306:3306
 
   wordpress:
     depends_on:
       - db
     image: wordpress:latest
     ports:
-      - "8000:80"
+      - 8000:80
     restart: always
     environment:
-      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
 volumes:
   db_data:
+
 ```
 Here the database is started first as specified by ```depends_on: -db```
+
+### Docker-compose
+
+```bash
+tom@tom-ubuntu:~/Projects/spring-boot-docker/src/main/scripts/wordpress$ docker-compose up -d
+Creating network "wordpress_default" with the default driver
+Creating volume "wordpress_db_data" with default driver
+Pulling db (mysql:5.7)...
+5.7: Pulling from library/mysql
+7b659169cb92: Downloading [====================>                              ]  20.93MB/50.47MB
+e47c3f06a3f5: Download complete
+e0656a27f56e: Download complete
+b9f33f34ef42: Download complete
+9fc5cbaf8704: Download complete
+5fb8407bef93: Download complete
+f8be4a2d031b: Downloading [=====================>                             ]  11.04MB/25.52MB
+b6cb2bff25e3: Download complete
+056cc4a5c89a: Download complete
+842896973144: Download complete
+e55b6e95b292: Waiting
+```
+
+### Check running docker containers:
+```bash
+tom@tom-ubuntu:~$ docker ps
+CONTAINER ID   IMAGE              COMMAND                  CREATED         STATUS         PORTS                                   NAMES
+d12d44b15455   wordpress:latest   "docker-entrypoint.s…"   4 seconds ago   Up 3 seconds   0.0.0.0:8000->80/tcp, :::8000->80/tcp   wordpress_wordpress_1
+06032a86b97a   mysql:5.7          "docker-entrypoint.s…"   6 seconds ago   Up 3 seconds   3306/tcp, 33060/tcp                     wordpress_db_1
+```
+
+go to port 8080:
+![image](https://user-images.githubusercontent.com/27693622/225575424-32514f39-07bc-4b29-8710-e725c04b54ca.png)
 
 #### Clear volumes
 ```bash

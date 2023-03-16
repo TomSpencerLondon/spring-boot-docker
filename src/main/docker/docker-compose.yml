@@ -37,6 +37,7 @@ services:
   springbootdocker:
     depends_on:
       - rabbitmq
+      - pageviewservice
     image: tomspencerlondon/springbootdocker
     ports:
       - "8090:8080"

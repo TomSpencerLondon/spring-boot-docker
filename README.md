@@ -424,40 +424,34 @@ docker volume rm $(docker volume ls -f dangling=true -q)
 version: '3'
 
 services:
-  mysqldb:
-    image: mysql
-    restart: always
-    ports:
-      - '3306:3306'
-    environment:
-      MYSQL_DATABASE: pageviewservice
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    restart: always
-    ports:
-      - "5671:5671"
-      - "5672:5672"
-      - "4639:4639"
-      - "25672:25672"
-
   pageviewservice:
-    image: springframeworkguru/pageviewservice
+    image: tomspencerlondon/pageviewservice
     ports:
-      - "8081:8081"
+      - "8082:8081"
+    networks:
+      - newrabbit
     restart: always
-    depends_on:
-      - mysqldb
-      - rabbitmq
-    environment:
-      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysqldb:3306/pageviewservice'
-      SPRING_PROFILES_ACTIVE: 'mysql'
-      SPRING_RABBITMQ_HOST: rabbitmq
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081"]
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
       interval: 1m30s
       timeout: 10s
       retries: 3
+networks:
+  newrabbit:
+    external: true
 ```
 
+Running spring-boot-docker with ```mvn docker:run``` and then we see logs in the pageviewservice:
+```bash
+
+
+pageviewservice_1  | Got Message!
+pageviewservice_1  | <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+pageviewservice_1  | <pageViewEvent>
+pageviewservice_1  |     <correlationId>feb10afb-5330-4a35-a2ba-4c303833ffe5</correlationId>
+pageviewservice_1  |     <pageUrl>springfarmework.guru/product/1</pageUrl>
+pageviewservice_1  |     <pageViewDate>2023-03-16T11:32:01.415Z</pageViewDate>
+pageviewservice_1  | </pageViewEvent>
+pageviewservice_1  | 
+
+```

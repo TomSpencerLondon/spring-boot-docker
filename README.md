@@ -417,3 +417,47 @@ docker-compose down
 ```bash
 docker volume rm $(docker volume ls -f dangling=true -q)
 ```
+
+### Spring docker-compose
+
+```yaml
+version: '3'
+
+services:
+  mysqldb:
+    image: mysql
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: pageviewservice
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5671:5671"
+      - "5672:5672"
+      - "4639:4639"
+      - "25672:25672"
+
+  pageviewservice:
+    image: springframeworkguru/pageviewservice
+    ports:
+      - "8081:8081"
+    restart: always
+    depends_on:
+      - mysqldb
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysqldb:3306/pageviewservice'
+      SPRING_PROFILES_ACTIVE: 'mysql'
+      SPRING_RABBITMQ_HOST: rabbitmq
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+```
+

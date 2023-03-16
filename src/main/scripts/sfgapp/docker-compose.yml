@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  pageviewservice:
+    image: tomspencerlondon/pageviewservice
+    ports:
+      - "8082:8081"
+    networks:
+      - newrabbit
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+networks:
+  newrabbit:
+    external: true

@@ -408,6 +408,11 @@ d12d44b15455   wordpress:latest   "docker-entrypoint.s…"   4 seconds ago   Up 
 go to port 8080:
 ![image](https://user-images.githubusercontent.com/27693622/225575424-32514f39-07bc-4b29-8710-e725c04b54ca.png)
 
+### Shut down
+```bash
+docker-compose down
+```
+
 #### Clear volumes
 ```bash
 docker volume rm $(docker volume ls -f dangling=true -q)

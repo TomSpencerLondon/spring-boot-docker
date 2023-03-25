@@ -510,3 +510,29 @@ networks:
 ```
 
 Above we have multiple services within docker-compose. We are using images that we have pushed to dockerhub.
+
+### Example docker config
+Dockerfile:
+```bash
+FROM openjdk:17-oracle
+
+EXPOSE 8080
+
+COPY target/example-project-0.0.1-SNAPSHOT.jar example-0.0.1-SNAPSHOT.jar
+
+ENTRYPOINT ["java","-jar","example-0.0.1-SNAPSHOT.jar"]
+```
+
+
+Docker Build, Tag & Push
+Step 1: Build Image
+docker build -t web_app1 .
+Step 2: Tag Your docker image
+docker tag web_app1:latest gcr.io/<GCP_Project_ID>/web_app1:latest
+Step 3: Verify image is created and you can see the new tag
+docker image list
+Step 4: One time setup
+gcloud auth configure-docker
+gcloud components update
+Step 5: Push your docker image
+Step 6 : Verify that you can pull image docker run -ti --rm -p 8080:8080 \ website

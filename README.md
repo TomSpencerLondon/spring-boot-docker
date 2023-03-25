@@ -536,3 +536,8 @@ gcloud auth configure-docker
 gcloud components update
 Step 5: Push your docker image
 Step 6 : Verify that you can pull image docker run -ti --rm -p 8080:8080 \ website
+
+### Container orchestration
+We then build the kubernetes example using yaml and expose application outside with a service account.
+
+

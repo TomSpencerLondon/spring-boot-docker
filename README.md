@@ -540,4 +540,18 @@ Step 6 : Verify that you can pull image docker run -ti --rm -p 8080:8080 \ websi
 ### Container orchestration
 We then build the kubernetes example using yaml and expose application outside with a service account.
 
+### Google cloud
+These links are useful on kubernetes cloud deployment:
+https://spring-gcp.saturnism.me/deployment/kubernetes/workload-identity
+and this one is for a Spring Boot java app on Google Kubernetes agent:
+https://codelabs.developers.google.com/codelabs/cloud-springboot-kubernetes#0
+
+### Spring and Kubernetes
+https://www.youtube.com/watch?v=JJnPLZq6yDg
+https://www.udemy.com/course/microservices-with-spring-boot/learn/lecture/36582152#overview
+
+Docker and Kubernetes full course:
+https://morioh.com/p/eb575f0543df
+
+https://www.youtube.com/watch?v=sGiz5jjBFQc
 
